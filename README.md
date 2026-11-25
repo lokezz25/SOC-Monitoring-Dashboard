@@ -1,3 +1,4 @@
+
 # SOC Monitoring Dashboard
 
 ## Overview
@@ -104,3 +105,7 @@ MIT – feel free to adapt for academic demos or commercial prototypes.
 
 ---
 **Enjoy your premium SOC monitoring demo!**
+
+# SOC-Monitoring-Dashboard
+A Security operations center monitoring dashboard using Python flask
+
