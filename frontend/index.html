@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SOC Monitoring Dashboard</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <h2 class="logo">SOC Dashboard</h2>
+        <ul class="nav">
+            <li><a href="#" class="nav-link active" data-section="dashboard">Dashboard</a></li>
+            <li><a href="#" class="nav-link" data-section="alerts">Alerts</a></li>
+            <li><a href="#" class="nav-link" data-section="agents">Agents</a></li>
+            <li><a href="#" class="nav-link" data-section="incidents">Incidents</a></li>
+            <li><a href="#" class="nav-link" data-section="mitre">MITRE ATT&CK</a></li>
+            <li><a href="#" class="nav-link" data-section="reports">Reports</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <!-- Header -->
+        <header>
+            <h1 id="section-title">Dashboard</h1>
+        </header>
+        <!-- Sections -->
+        <section id="dashboard-section" class="section">
+            <div class="kpi-grid">
+                <div class="kpi-card" id="total-alerts"><span class="kpi-value">0</span><span class="kpi-label">Total Alerts</span></div>
+                <div class="kpi-card" id="critical-alerts"><span class="kpi-value">0</span><span class="kpi-label">Critical</span></div>
+                <div class="kpi-card" id="high-alerts"><span class="kpi-value">0</span><span class="kpi-label">High</span></div>
+                <div class="kpi-card" id="medium-alerts"><span class="kpi-value">0</span><span class="kpi-label">Medium</span></div>
+                <div class="kpi-card" id="low-alerts"><span class="kpi-value">0</span><span class="kpi-label">Low</span></div>
+                <div class="kpi-card" id="active-incidents"><span class="kpi-value">0</span><span class="kpi-label">Active Incidents</span></div>
+                <div class="kpi-card" id="resolved-incidents"><span class="kpi-value">0</span><span class="kpi-label">Resolved Incidents</span></div>
+                <div class="kpi-card" id="agents-status"><span class="kpi-value">0</span><span class="kpi-label">Online Agents</span></div>
+            </div>
+            <div class="charts-grid">
+                <canvas id="severityChart"></canvas>
+                <canvas id="categoryChart"></canvas>
+            </div>
+            <div class="simulation-panel">
+                <h3>Simulation Control Panel (Demo)</h3>
+                <div class="sim-buttons">
+                    <button class="sim-btn" data-scenario="failed_login">Failed Login</button>
+                    <button class="sim-btn" data-scenario="brute_force">Brute Force</button>
+                    <button class="sim-btn" data-scenario="port_scan">Port Scan</button>
+                    <button class="sim-btn" data-scenario="malware">Malware</button>
+                    <button class="sim-btn" data-scenario="sql_injection">SQL Injection</button>
+                    <button class="sim-btn" data-scenario="privilege_escalation">Priv Escalation</button>
+                    <button class="sim-btn" data-scenario="network_traffic">Network Traffic</button>
+                    <button id="clear-demo" class="danger-btn">Clear Demo Alerts</button>
+                </div>
+            </div>
+        </section>
+        <section id="alerts-section" class="section hidden">
+            <div class="filter-bar">
+                <input type="text" id="search-input" placeholder="Search alerts..." />
+                <select id="severity-filter">
+                    <option value="">All Severities</option>
+                    <option value="Critical">Critical</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+                <select id="status-filter">
+                    <option value="">All Statuses</option>
+                    <option value="New">New</option>
+                    <option value="Investigating">Investigating</option>
+                    <option value="Resolved">Resolved</option>
+                </select>
+            </div>
+            <table class="alerts-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Timestamp</th>
+                        <th>Title</th>
+                        <th>Severity</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="alerts-body"></tbody>
+            </table>
+        </section>
+        <!-- Placeholder sections for agents, incidents, mitre, reports -->
+        <section id="agents-section" class="section hidden">
+            <h2>Simulated Agents</h2>
+            <div class="filter-bar">
+                <input type="text" id="agent-search" placeholder="Search agents..." />
+                <select id="agent-status-filter">
+                    <option value="">All Statuses</option>
+                    <option value="Online">Online</option>
+                    <option value="Offline">Offline</option>
+                </select>
+            </div>
+            <table class="agents-table">
+                <thead>
+                    <tr>
+                        <th>Name</th><th>ID</th><th>Hostname</th><th>OS</th><th>IP</th><th>Status</th><th>Last Activity</th>
+                    </tr>
+                </thead>
+                <tbody id="agents-body"></tbody>
+            </table>
+        </section>
+        <section id="incidents-section" class="section hidden">
+            <h2>Incident Management</h2>
+            <div class="filter-bar">
+                <input type="text" id="incident-search" placeholder="Search incidents..." />
+                <select id="incident-status-filter">
+                    <option value="">All Statuses</option>
+                    <option value="New">New</option>
+                    <option value="Investigating">Investigating</option>
+                    <option value="Resolved">Resolved</option>
+                </select>
+                <select id="incident-severity-filter">
+                    <option value="">All Severities</option>
+                    <option value="Critical">Critical</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+            </div>
+            <table class="incidents-table">
+                <thead>
+                    <tr>
+                        <th>ID</th><th>Title</th><th>Severity</th><th>Analyst</th><th>Status</th><th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="incidents-body"></tbody>
+            </table>
+        </section>
+        <section id="mitre-section" class="section hidden">
+            <h2>MITRE ATT&CK Mapping (Demo)</h2>
+            <table class="mitre-table">
+                <thead>
+                    <tr>
+                        <th>ID</th><th>Tactic</th><th>Technique</th><th>Category</th><th>Description</th><th>Related Alerts</th>
+                    </tr>
+                </thead>
+                <tbody id="mitre-body"></tbody>
+            </table>
+        </section>
+        <section id="reports-section" class="section hidden">
+            <h3>Generate PDF Report</h3>
+            <label>Start Date: <input type="date" id="report-start" /></label>
+            <label>End Date: <input type="date" id="report-end" /></label>
+            <button id="generate-report" class="primary-btn">Download PDF</button>
+        </section>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>
